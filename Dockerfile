@@ -3,7 +3,6 @@ ARG NF_NAME
 ARG PORT
 
 #Getting Free5GC and installing required go packages
-#Latest version support http traffic redirecting in a kubernetes cluster
 RUN cd $GOPATH/src \
     && git clone --recursive -b v3.0.3 -j `nproc` https://github.com/free5gc/free5gc.git \
     && cd free5gc \
