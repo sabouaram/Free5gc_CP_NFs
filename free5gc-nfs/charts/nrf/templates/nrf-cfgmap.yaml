@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  '{{ include "nrf.fullname" . }}-cfgmap'
+  labels:
+    name: nrf-config
+  namespace: {{ .Release.Namespace }}
+data:
+  nrfcfg.conf: |-
+    info:
+      version: 1.0.0
+      description: NRF initial local configuration
+    configuration:
+      MongoDBName: "free5gc"
+      MongoDBUrl: mongodb://{{ .Values.config.mongodb.url }}:{{ .Values.config.mongodb.port}}
+      DefaultServiceIP: nrf.{{ .Release.Namespace }}.svc.cluster.local
+      sbi:
+        scheme: {{ .Values.config.scheme }} 
+        ipv4Addr: 0.0.0.0
+        port: {{ .Values.config.port }}
+      DefaultPlmnId:
+        mcc: {{ .Values.global.plmn.mcc }}
+        mnc: {{ .Values.global.plmn.mnc }}
+      serviceNameList:
+         - nnrf-nfm
+         - nnrf-disc
+    
+ 

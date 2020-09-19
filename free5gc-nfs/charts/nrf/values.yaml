@@ -1,0 +1,27 @@
+
+
+replicaCount: 1
+
+image:
+  name: nrf
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+config: 
+  #Fixed_NRF_HTTP_Server_config
+  ##########################################
+  scheme: http
+  ipv4Addr: 0.0.0.0
+  port: 29510
+  mongodb:
+    url: mongodb-standalone-0.mongodb-svc
+    port: 27017 
+  ########################################## 
+# hostnetwork -> true for turning the nrf http server application on the host network interfaces
+hostnetwork: false
+# registry pull  secret
+pullsecret: ""
+nameOverride: ""
+fullnameOverride: ""
+
+

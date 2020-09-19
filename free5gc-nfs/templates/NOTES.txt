@@ -1,0 +1,8 @@
+------------------------------NFs SBI are Headless Cluster Services assignedan A DNS Records------------------------------------ 
+AUSF API Server: ausf.{{ .Release.Namespace }}.svc.cluster.local:29509
+UDM  API Server: udm.{{ .Release.Namespace }}.svc.cluster.local:29503
+UDR API Server:  udr.{{ .Release.Namespace }}.svc.cluster.local:29504
+NRF API Server:  nrf.{{ .Release.Namespace }}.svc.cluster.local:29510
+WEBCONSOLE:[nodeport svc] cluster-machine-IP:32000
+Mongodb: mongodb-standalone-0.mongodb-svc
+------------------------------------------------------------------------------------------------------------------------------------

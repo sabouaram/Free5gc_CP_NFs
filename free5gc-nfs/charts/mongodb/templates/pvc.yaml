@@ -1,0 +1,13 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "mongodb.name" . }}-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: {{ include "mongodb.name" . }}-storage
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: {{ .Values.mongodb.pvcstorage }}

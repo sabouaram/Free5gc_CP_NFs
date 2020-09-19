@@ -1,0 +1,13 @@
+replicaCount: 1
+
+nodeAffinity:
+  nodename: minikube 
+
+
+mongodb:
+  image:
+    repository: mongo
+    tag: 4.0.8
+    pullPolicy: IfNotPresent
+  pvcstorage: 1Gi
+  pvstorage: 1Gi

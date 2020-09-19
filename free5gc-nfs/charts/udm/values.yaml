@@ -1,0 +1,34 @@
+# Default values for udm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+repository: 
+image:
+  name: udm
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+config:
+
+  #UDR config
+  udr:
+    scheme: http
+    udrsvcname: udr.{{ .Release.Namespace }}.svc.cluster.local
+    port: 29504
+
+  #UDM config (nudmport is fixed)
+  udm:
+    nudmscheme: http
+    bindingIPv4: 0.0.0.0
+    nudmport: 29503
+
+# hostnetwork -> true for turning the ausf http server application on the host network interfaces
+hostnetwork: false
+
+# registry pull  secret
+pullsecret: regitrypullsecret
+nameOverride: ""
+fullnameOverride: ""
+
+

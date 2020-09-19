@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ include "ausf.fullname" . }}-ausf'
+  labels:
+    {{- include "ausf.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: '{{ include "ausf.name" . }}-ausf'
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: '{{ include "ausf.name" . }}-ausf'
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.pullsecret}}
+      hostNetwork: {{ .Values.hostnetwork}}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: '{{ .Values.image.name }}:{{ .Values.image.tag }}'
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+         
+          command: ["/bin/sh"]
+          args: ["-c", "./ausf"]
+          ports:
+            - name: http-ausf
+              containerPort: {{.Values.config.nausfport}}
+              protocol: TCP
+          volumeMounts:
+            - name: ausf-configuration
+              mountPath: /free5gc/config/
+      volumes:
+        - name: ausf-configuration
+          configMap:
+            defaultMode: 420
+            name: '{{ include "ausf.fullname" . }}-cfgmap'

@@ -1,0 +1,25 @@
+
+
+replicaCount: 1
+
+image:
+  name: ausf
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+config: 
+
+  #Fixed_AUSF_HTTP_Server_config
+  ##########################################
+  nausfauthipv4: 0.0.0.0
+  nausfport: 29509
+  registerIPV4: ausf.{{ .Release.Namespace }}.svc.cluster.local
+  ##########################################
+# hostnetwork -> true for turning the ausf http server application on the host network interfaces
+hostnetwork: false
+# registry pull  secret
+pullsecret: ""
+nameOverride: ""
+fullnameOverride: ""
+
+

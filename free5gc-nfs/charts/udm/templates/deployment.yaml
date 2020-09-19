@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ include "udm.fullname" . }}-udm'
+  labels:
+    {{- include "udm.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: '{{ include "udm.name" . }}-udm'
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: '{{ include "udm.name" . }}-udm'
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.pullsecret}}
+      hostNetwork: {{ .Values.hostnetwork}}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+         
+          command: ["/bin/sh"]
+          args: ["-c", "./udm"]
+          ports:
+            - name: http-udm
+              containerPort: {{.Values.config.udm.nudmport}}
+              protocol: TCP
+          volumeMounts:
+            - name: udm-configuration
+              mountPath: /free5gc/config/
+      volumes:
+        - name: udm-configuration
+          configMap:
+            defaultMode: 420
+            name: '{{ include "udm.fullname" . }}-cfgmap'

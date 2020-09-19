@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: udm
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app.kubernetes.io/name: '{{ include "udm.name" . }}-udm'
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+  - protocol: TCP
+    port: {{ .Values.config.udm.nudmport }}
+    targetPort: http-udm

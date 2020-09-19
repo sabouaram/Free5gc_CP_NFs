@@ -1,0 +1,41 @@
+# Default values for udm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+repository: 
+image:
+  name: udr
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+  
+config:
+  #NRF config
+  nrf:
+    scheme: http
+    ipv4: nrf.{{ .Release.Namespace }}.svc.cluster.local
+    port: 29510
+
+  #UDR config (nudmport 29504 is fixed)
+  udr:
+    nudrscheme: http
+    nudripv4: 0.0.0.0
+    nudrport: 29504
+    registerIPv4: udr.{{ .Release.Namespace }}.svc.cluster.local
+
+  mongodb:
+    scheme: http
+    url:  mongodb-standalone-0.mongodb-svc
+    port: 27017
+
+
+# hostnetwork -> true for turning the ausf http server application on the host network interfaces
+hostnetwork: false
+
+# registry pull  secret
+pullsecret: ""
+nameOverride: ""
+fullnameOverride: ""
+
+

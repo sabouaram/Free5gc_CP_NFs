@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "mongodb.name" . }}-standalone
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: {{ include "mongodb.name" . }}-svc
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+        selector: {{ include "mongodb.name" . }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - {{.Values.nodeAffinity.nodename }}
+      containers:
+      - name: {{ include "mongodb.name" . }}
+        image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
+        imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
+        args:
+          - "--noauth"
+        volumeMounts:
+        - name: {{ include "mongodb.name" . }}-conf
+          mountPath: /config
+          readOnly: true
+        - name: {{ include "mongodb.name" . }}-data
+          mountPath: /data/db
+      volumes:
+      - name: {{ include "mongodb.name" . }}-conf
+        configMap:
+          name: {{ include "mongodb.name" . }}-cfgmap
+          items:
+          - key: mongo.conf
+            path: mongo.conf
+      - name: {{ include "mongodb.name" . }}-data
+        persistentVolumeClaim:
+          claimName: {{ include "mongodb.name" . }}-pvc

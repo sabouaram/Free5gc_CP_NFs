@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  '{{ include "ausf.fullname" . }}-cfgmap'
+  labels:
+    name: ausf-config
+  namespace: {{ .Release.Namespace }}
+data:
+  ausfcfg.conf: |-
+    info:
+      version: 1.0.0
+      description: AUSF initial local configuration
+    configuration:
+      sbi:
+        scheme: http
+        bindingIPv4: {{ .Values.config.nausfauthipv4 }}
+        registerIPv4: ausf.{{ .Release.Namespace }}.svc.cluster.local
+        port: {{.Values.config.nausfport}}
+      serviceNameList:
+        - nausf-auth
+      nrfUri: http://nrf.{{ .Release.Namespace }}.svc.cluster.local:29510
+      plmnSupportList:
+        - mcc: {{.Values.global.plmn.mcc}}
+          mnc: {{.Values.global.plmn.mnc}}
+        - mcc: {{.Values.global.plmn.mcc}}
+          mnc: {{.Values.global.plmn.mnc}}
+      groupId: {{.Values.config.groupId}}
+    
+ 

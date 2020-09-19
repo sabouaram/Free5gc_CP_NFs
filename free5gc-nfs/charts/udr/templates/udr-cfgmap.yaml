@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ include "udr.fullname" . }}-cfgmap
+  labels:
+    name: udr-config
+  namespace: {{ .Release.Namespace }}
+data:
+  udrcfg.conf: |-
+    info:
+      version: 1.0.0
+      description: UDR initial local configuration
+
+    configuration:
+      sbi:
+        scheme: {{ .Values.config.udr.nudrscheme }}
+        ipv4Addr: {{ .Values.config.udr.nudripv4 }}
+        registerIPv4: udr.{{ .Release.Namespace }}.svc.cluster.local
+        port: {{ .Values.config.udr.nudrport }}
+      mongodb:
+        name: free5gc
+        url: mongodb://{{ .Values.config.mongodb.url}}:{{ .Values.config.mongodb.port}}
+      nrfUri: http://nrf.{{ .Release.Namespace}}.svc.cluster.local:29510
+ 
